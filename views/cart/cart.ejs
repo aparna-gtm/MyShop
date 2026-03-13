@@ -1,0 +1,78 @@
+<% layout("layouts/boilerPlate.ejs") %>
+<%- include('../partials/navbar'); %>
+<%- include('../partials/flash'); %>
+
+<div class="container py-5">
+  <h3 class="text-center  mb-5 pt-5"><i class="bi bi-cart4"></i> Your Cart</h3>
+
+  <% if (user.cart.length === 0) { %>
+    <div class="alert alert-info text-center">Your cart is empty.</div>
+  <% } else { 
+      let totalAmount = 0;
+      let itemNames = [];
+
+      for (let item of user.cart) {
+        totalAmount += item.price;
+        itemNames.push(item.name);
+      }
+  %>
+
+    <div class="row">
+      <!-- Product Cards (smaller width) -->
+      <div class="col-lg-8">
+        <div class="row g-3">
+          <% for (let pro of user.cart) { %>
+            <div class="col-md-6 col-lg-6">
+              <div class="card h-100 border rounded shadow-sm">
+                <img src="<%= pro.image %>" class="card-img-top" alt="Product" 
+                     style="height: 180px; object-fit: contain; background-color: #f9f9f9;">
+                <div class="card-body d-flex flex-column">
+                  <h6 class="card-title mb-1"><%= pro.name %></h6>
+                  <p class="text-muted small mb-2"><%= pro.description %></p>
+                  <p class="text-success fw-semibold mb-2">Price: ₹ <%= pro.price %></p>
+                  <form action="/user/<%= pro._id %>/remove" method="POST">
+                      <button type="submit" class="btn btn-danger btn-sm w-100">
+                        Remove from Cart
+                      </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Payment Block (Right Side) -->
+      <div class="col-lg-4">
+        <div class="card border-success shadow-sm p-4 bg-light sticky-top" style="top: 80px;">
+          <h5 class="fw-bold text-center mb-3 text-success">
+            <i class="bi bi-receipt"></i> Total Amount: ₹ <%= totalAmount %>
+          </h5>
+
+          <div class="mb-3">
+            <h6 class="fw-semibold">Payment Breakdown:</h6>
+            <ul class="list-group list-group-flush mb-3">
+              <% for (let pro of user.cart) { %>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <%= pro.name %>
+                  <span class="fw-semibold text-success">₹ <%= pro.price %></span>
+                </li>
+              <% } %>
+            </ul>
+          </div>
+
+          <form action="/payment_gateway/payumoney" method="POST">
+            <input type="hidden" name="amount" value="<%= totalAmount %>"/>
+            <input type="hidden" name="phone" value="9999999999" />
+            <input type="hidden" name="service_provider" value="payu_paisa"/>
+            <input type="hidden" name="productinfo" value="<%= itemNames.join(', ') %>"/>
+            <button type="submit" class="btn btn-success w-100 fw-bold">
+              Checkout
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  <% } %>
+</div>

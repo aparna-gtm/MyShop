@@ -1,0 +1,17 @@
+<form action="<%= PAYU_BASE_URL %>" method="POST" id="payuForm">
+  <input type="hidden" name="key" value="<%= paymentData.key %>"/>
+  <input type="hidden" name="txnid" value="<%= paymentData.txnid %>"/>
+  <input type="hidden" name="amount" value="<%= paymentData.amount %>"/>
+  <input type="hidden" name="productinfo" value="<%= paymentData.productinfo %>"/>
+  <input type="hidden" name="firstname" value="<%= paymentData.firstname %>"/>
+  <input type="hidden" name="email" value="<%= paymentData.email %>"/>
+  <input type="hidden" name="phone" value="<%= paymentData.phone %>"/>
+  <input type="hidden" name="surl" value="<%= paymentData.surl %>"/>
+  <input type="hidden" name="furl" value="<%= paymentData.furl %>"/>
+  <input type="hidden" name="hash" value="<%= paymentData.hash %>"/>
+  <input type="hidden" name="service_provider" value="payu_paisa"/>
+</form>
+
+<script>
+  document.getElementById("payuForm").submit();
+</script>

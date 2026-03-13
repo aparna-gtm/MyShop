@@ -1,0 +1,119 @@
+<% layout("layouts/boilerplate.ejs") %>
+
+<!-- Navbar -->
+<%- include("../partials/navbar") %>
+<%- include("../partials/flash") %>
+
+<div class="container my-5">
+  <div class="row g-4 justify-content-center">
+
+    <!-- Left Side: Product Card -->
+    <div class="col-md-5">
+      <div class="card shadow border-0">
+        <!-- Full product image with object-fit: contain -->
+        <img src="<%= foundProduct.image %>" 
+             class="card-img-top img-fluid" 
+             alt="<%= foundProduct.name %>" 
+             style="height: 250px; width: 100%; object-fit: contain; background-color: #f9f9f9;">
+        <div class="card-body">
+          <h4 class="card-title mb-2"><%= foundProduct.name %></h4>
+          <h6 class="text-success mb-3">₹<%= foundProduct.price %></h6>
+          <p class="card-text small"><%= foundProduct.description %></p>
+
+          <!-- Buttons Section -->
+          <div class="d-grid gap-2 mt-3">
+            <% if(currentUser && currentUser.role==='seller'){ %>
+              <a href="/product/<%= foundProduct._id %>/edit" class="btn btn-dark w-100 fw-medium">
+                <i class="bi bi-pencil-square"></i> Edit Product
+              </a>
+            <% } %>
+
+            <!-- Buy Product (direct to PayU) -->
+            <form action="/payment_gateway/payumoney" method="POST">
+              <input type="hidden" name="amount" value="<%= foundProduct.price %>"/>
+              <input type="hidden" name="phone" value="<%= currentUser ? currentUser.phone || '9999999999' : '9999999999' %>" />
+              <input type="hidden" name="firstname" value="<%= currentUser ? currentUser.name || 'Customer' : 'Customer' %>"/>
+              <input type="hidden" name="email" value="<%= currentUser ? currentUser.email || 'customer@example.com' : 'customer@example.com' %>"/>
+              <input type="hidden" name="productinfo" value="<%= foundProduct.name %>"/>
+              <input type="hidden" name="service_provider" value="payu_paisa"/>
+              <button type="submit" class="btn btn-dark w-100 fw-medium">
+                <i class="bi bi-bag-check-fill"></i> Buy Product
+              </button>
+            </form>
+
+            <!-- Add to Cart (green) -->
+            <form action="/user/<%= foundProduct._id %>/add" method="POST">
+              <button type="submit" class="btn btn-success w-100 fw-medium">
+                <i class="bi bi-cart-plus-fill"></i> Add to Cart
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Side: Review Form -->
+    <div class="col-md-4">
+      <div class="card shadow border-0">
+        <div class="card-body">
+          <h5 class="mb-3">Leave a Review</h5>
+          <form action="/product/<%= foundProduct._id %>/review" method="POST">
+            <div class="mb-1">
+              <fieldset class="starability-basic">
+                <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="0" checked aria-label="No rating." />
+                <input type="radio" id="first-rate1" name="rating" value="1" /><label for="first-rate1" title="Terrible">1 star</label>
+                <input type="radio" id="first-rate2" name="rating" value="2" /><label for="first-rate2" title="Not good">2 stars</label>
+                <input type="radio" id="first-rate3" name="rating" value="3" /><label for="first-rate3" title="Average">3 stars</label>
+                <input type="radio" id="first-rate4" name="rating" value="4" /><label for="first-rate4" title="Very good">4 stars</label>
+                <input type="radio" id="first-rate5" name="rating" value="5" /><label for="first-rate5" title="Amazing">5 stars</label>
+              </fieldset>
+            </div>
+
+            <div class="mb-3">
+              <label for="comment" class="form-label small">Comment</label>
+              <textarea class="form-control form-control-sm" id="comment" name="comment" rows="3"
+                placeholder="Write your review..."></textarea>
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-dark btn-sm">Submit Review</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Reviews Section -->
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-9">
+      <div class="card shadow border-0">
+        <div class="card-body">
+          <h5 class="mb-4">Customer Reviews</h5>
+
+          <% if(foundProduct.reviews.length===0){ %>
+            <div class="alert alert-secondary text-center">No reviews yet. Be the first to leave one!</div>
+          <% } else { %>
+            <% for(let review of foundProduct.reviews){ %>
+              <div class="card border rounded-3 shadow-sm mb-3">
+                <div class="card-body d-flex flex-column position-relative">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <p class="starability-result mb-0" data-rating="<%= review.rating %>"><%= review.rating %></p>
+                    <small><%= review.createdAt ? review.createdAt.toDateString() : '' %></small>
+                  </div>
+                  <p class="mb-0"><%= review.comment %></p>
+
+                  <form action="/product/<%= foundProduct._id %>/review/<%= review._id %>?_method=DELETE"
+                    method="POST" class="position-absolute bottom-0 end-0 m-2">
+                    <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                  </form>
+                </div>
+              </div>
+            <% } %>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

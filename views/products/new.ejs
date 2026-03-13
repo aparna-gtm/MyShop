@@ -1,0 +1,103 @@
+<!-- including the boilerplate here -->
+<% layout("layouts/boilerplate.ejs") %>
+
+ <!-- including flash -->
+ <%- include("../partials/flash") %>
+
+
+
+
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <div class="card shadow-lg border-0">
+          <div class="card-body p-4">
+            <h3 class="card-title text-center mb-4">Add New Product</h3>
+
+            <form action="/products" method="POST" novalidate class=" needs-validation">
+
+              <!-- Product Name -->
+              <div class="mb-3">
+                <label for="name" class="form-label">Product Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter product name" required>
+                <div class="valid-feedback">
+                  Looks good!
+                </div>
+                <div class="invalid-feedback">
+                  Please enter the field.
+                </div>
+              </div>
+
+              <!-- Product Image Link -->
+              <div class="mb-3">
+                <label for="image" class="form-label">Product Image URL</label>
+                <input type="url" class="form-control" id="image" name="image"
+                  placeholder="https://example.com/image.jpg" required>
+                <div class="valid-feedback">
+                  Looks good!
+                </div>
+                <div class="invalid-feedback">
+                  Please enter link of product.
+                </div>
+              </div>
+
+              <!-- Product Price -->
+              <div class="mb-3">
+                <label for="price" class="form-label">Price</label>
+                <input type="number" class="form-control" id="price" name="price" placeholder="Enter price" required>
+                <div class="valid-feedback">
+                  Looks good!
+                </div>
+                <div class="invalid-feedback">
+                  Please enter price field.
+                </div>
+              </div>
+
+              <!-- Product Description -->
+              <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="3"
+                  placeholder="Enter product description" required></textarea>
+                <div class="valid-feedback">
+                  Looks good!
+                </div>
+                <div class="invalid-feedback">
+                  Please enter description field.
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="d-grid">
+                <button type="submit" class="btn btn-dark">Add Product</button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>(function () {
+      'use strict'
+
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.querySelectorAll('.needs-validation')
+
+      // Loop over them and prevent submission
+      Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+          form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+              event.preventDefault()
+              event.stopPropagation()
+            }
+
+            form.classList.add('was-validated')
+          }, false)
+        })
+    })()
+  </script>
+
+
+  <!-- enctype="multipart/form-data -> when you add a file input, the form needs to send binary data -->

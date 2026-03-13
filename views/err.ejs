@@ -1,0 +1,9 @@
+<!-- including the boilerplate here -->
+<% layout("layouts/boilerplate.ejs") %>
+
+
+<div class="alert alert-danger" role="alert">
+    
+    <h1>Something went wrong!</h1>
+ <%= typeof err !== "undefined" ? err : "Unknown error occurred." %>
+</div>

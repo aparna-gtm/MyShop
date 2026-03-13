@@ -32,6 +32,4 @@ I'm passionate about building meaningful web applications and continuously learn
 
 If you're working on something exciting or just want to connect and share ideas, feel free to reach out. I'm always open to collaboration, feedback, or a good tech conversation!
 
-💼 **LinkedIn:** Connect with me
 
-*"Keep learning, keep building, and let's create something amazing together!"*

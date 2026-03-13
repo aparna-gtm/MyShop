@@ -102,3 +102,7 @@ app.use('/payment_gateway', paymentRoutes);
 app.listen(8080,()=>{
     console.log("Server started at port 8080");
 })
+
+app.get("/", (req, res) => {
+  res.redirect("/products");
+});
